@@ -1,14 +1,15 @@
-# Predictive Sales Dashboard
+# Predictive Sales Dashboard - Flask App
 
-A Streamlit-based sales forecasting dashboard with Scikit-learn ML models and Gemini AI insights.
+A Flask-based sales forecasting dashboard with Scikit-learn ML models and Gemini AI insights. Deployable from VS Code to any platform.
 
 ## Features
 
 - 📊 **ML-Powered Predictions**: Random Forest & Linear Regression models
-- 🤖 **Gemini AI Integration**: Get strategic insights and recommendations
-- 📈 **Interactive Charts**: Plotly visualizations with dark theme
-- 📋 **Variance Analysis**: DAX-equivalent calculations for Power BI
-- 📥 **CSV Export**: Export data for Power BI integration
+- 🤖 **Gemini AI Integration**: Strategic insights and recommendations
+- 💱 **USD/INR Currency Toggle**: Switch between currencies instantly
+- 📁 **Import Custom Data**: Upload your own CSV sales data
+- 📥 **Export to Power BI**: Download CSV files for integration
+- 🌐 **VS Code Deployable**: Deploy to Render, Railway, Heroku, etc.
 
 ## Quick Start
 
@@ -21,35 +22,92 @@ pip install -r requirements.txt
 
 ### 2. Configure Gemini API Key
 
-**Option A**: Create a `.env` file:
 ```bash
 cp .env.example .env
 # Edit .env and add your GEMINI_API_KEY
 ```
 
-**Option B**: Enter directly in the app sidebar
-
 Get your API key from: https://makersuite.google.com/app/apikey
 
-### 3. Run the App
+### 3. Run Locally
 
 ```bash
-streamlit run streamlit_sales_dashboard.py
+python app.py
 ```
 
-The app will open at `http://localhost:8501`
+Open `http://localhost:5000` in your browser.
 
-## Usage
+## Importing Custom Data
 
-1. **Select ML Model**: Choose between RandomForest or LinearRegression
-2. **Set Forecast Period**: Adjust how many months to predict
-3. **View KPIs**: See key metrics (Variance, MAPE, Accuracy)
-4. **Generate AI Insights**: Click the button to get Gemini-powered analysis
-5. **Export Data**: Download CSV files for Power BI
+Upload a CSV file with the following format:
+
+| Date | Actual_Sales |
+|------|--------------|
+| 2024-01-01 | 85000 |
+| 2024-02-01 | 78000 |
+| 2024-03-01 | 92000 |
+
+The app will automatically:
+- Parse the dates
+- Generate ML predictions
+- Calculate variances and KPIs
+
+## Deployment
+
+### Deploy to Render
+
+1. Create a `render.yaml` file (already included)
+2. Push to GitHub
+3. Connect to Render and deploy
+
+### Deploy to Railway
+
+1. Push to GitHub
+2. Connect to Railway
+3. Set `GEMINI_API_KEY` environment variable
+4. Deploy
+
+### Deploy to Heroku
+
+```bash
+# Create Procfile (already included)
+heroku create your-app-name
+heroku config:set GEMINI_API_KEY=your-key
+git push heroku main
+```
+
+### Deploy from VS Code
+
+1. Install Azure/Railway/Render extension
+2. Right-click project → Deploy
+3. Set environment variables in dashboard
+
+## Project Structure
+
+```
+python_app/
+├── app.py                 # Flask application
+├── templates/
+│   └── index.html         # Frontend UI
+├── requirements.txt       # Python dependencies
+├── .env.example          # Environment template
+├── Procfile              # Heroku deployment
+├── render.yaml           # Render deployment
+└── README.md             # This file
+```
+
+## API Endpoints
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/` | GET | Dashboard UI |
+| `/api/data` | GET | Get all dashboard data |
+| `/api/insights` | GET | Generate Gemini AI insights |
+| `/api/upload` | POST | Upload custom CSV data |
+| `/api/export/<type>` | GET | Export data as CSV |
+| `/api/reset` | GET | Reset to sample data |
 
 ## DAX Formulas (Power BI)
-
-The app includes ready-to-use DAX formulas:
 
 ```dax
 Variance = SUM(Sales[Actual]) - SUM(Sales[Predicted])
@@ -58,22 +116,19 @@ MAPE = AVERAGEX(Sales, ABS(Sales[Actual] - Sales[Predicted]) / Sales[Actual]) * 
 Forecast Accuracy = 100 - [MAPE]
 ```
 
-## Project Structure
+## Environment Variables
 
-```
-python_app/
-├── streamlit_sales_dashboard.py  # Main application
-├── requirements.txt              # Python dependencies
-├── .env.example                  # Environment template
-└── README.md                     # This file
-```
+| Variable | Description |
+|----------|-------------|
+| `GEMINI_API_KEY` | Google Gemini API key |
+| `PORT` | Server port (default: 5000) |
 
 ## Screenshots
 
-The dashboard features:
+The dashboard includes:
 - Dark analytics theme
-- 5 KPI cards (Actual, Predicted, Variance, Accuracy, MAPE)
-- Interactive line chart with actual vs predicted sales
-- Variance analysis table with status indicators
+- 5 KPI cards with currency toggle
+- Interactive Plotly chart
+- Variance analysis table
 - Gemini AI insights panel
-- Future predictions table
+- CSV import/export functionality
