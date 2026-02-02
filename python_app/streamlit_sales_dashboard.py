@@ -184,7 +184,7 @@ def get_gemini_insights(df, future_df, kpis):
         return "⚠️ Gemini API key not configured. Add GEMINI_API_KEY to your .env file or Streamlit secrets."
     
     try:
-        model = genai.GenerativeModel('gemini-1.5-flash')
+        model = genai.GenerativeModel('gemini-2.5-flash')
         
         # Prepare context
         prompt = f"""
